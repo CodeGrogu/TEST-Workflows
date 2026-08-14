@@ -55,15 +55,15 @@
 
     <!-- Quick Action Utilities -->
     <div class="hud-quick-actions">
-      <button class="hud-btn" id="btn-snapshot" title="Capture High-Res Wallpaper">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="hud-icon">
+      <button class="hud-btn" id="btn-snapshot" title="Capture High-Res Wallpaper" type="button">
+        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" class="hud-icon">
           <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path>
           <circle cx="12" cy="13" r="4"></circle>
         </svg>
         <span>Snapshot</span>
       </button>
-      <button class="hud-btn" id="btn-toggle-sequencer" title="Open 8-Step Cyber Sequencer">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="hud-icon">
+      <button class="hud-btn" id="btn-toggle-sequencer" title="Open 8-Step Cyber Sequencer" type="button">
+        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" class="hud-icon">
           <rect x="2" y="2" width="20" height="20" rx="2.18" ry="2.18"></rect>
           <line x1="7" y1="2" x2="7" y2="22"></line>
           <line x1="17" y1="2" x2="17" y2="22"></line>
@@ -108,14 +108,14 @@
 
         <!-- Interactive Action Quick Buttons -->
         <div class="hero-actions">
-          <button class="btn btn-primary" id="btn-burst">
-            <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <button class="btn btn-primary" id="btn-burst" type="button">
+            <svg class="btn-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
               <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
             </svg>
-            Trigger Supernova (Space)
+            <span>Trigger Supernova (Space)</span>
           </button>
-          <button class="btn btn-secondary" id="btn-audio-toggle">
-            <svg class="btn-icon" id="audio-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <button class="btn btn-secondary" id="btn-audio-toggle" type="button">
+            <svg class="btn-icon" id="audio-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
               <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
               <path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path>
             </svg>
@@ -124,9 +124,11 @@
         </div>
       </div>
     </div>
+  </main>
 
-    <!-- Floating 8-Step Interactive Cyber Sequencer HUD Drawer -->
-    <div class="sequencer-drawer" id="sequencer-drawer">
+  <!-- Floating 8-Step Interactive Cyber Sequencer HUD Modal / Drawer (Root-level fixed positioning) -->
+  <div class="sequencer-drawer" id="sequencer-drawer" aria-hidden="true">
+    <div class="sequencer-inner">
       <div class="sequencer-header">
         <div class="sequencer-title-wrap">
           <span class="sequencer-badge">SYNTH ENGINE</span>
@@ -137,13 +139,13 @@
             <span class="bpm-label">BPM: <strong id="bpm-val">128</strong></span>
             <input type="range" id="bpm-slider" min="60" max="180" value="128">
           </div>
-          <button class="btn-seq-play" id="btn-seq-play">
-            <svg class="seq-play-icon" viewBox="0 0 24 24" fill="currentColor">
+          <button class="btn-seq-play" id="btn-seq-play" type="button">
+            <svg class="seq-play-icon" width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
               <polygon points="5 3 19 12 5 21 5 3"></polygon>
             </svg>
-            <span>Play Pattern</span>
+            <span id="seq-play-text">Play Pattern</span>
           </button>
-          <button class="btn-seq-close" id="btn-seq-close">&times;</button>
+          <button class="btn-seq-close" id="btn-seq-close" title="Close Sequencer" type="button">&times;</button>
         </div>
       </div>
 
@@ -153,14 +155,14 @@
         <div class="seq-track" data-track="lead">
           <span class="seq-track-name">LEAD SYNTH</span>
           <div class="seq-steps" id="steps-lead">
-            <button class="seq-step active" data-step="0" data-note="880"></button>
-            <button class="seq-step" data-step="1" data-note="987.77"></button>
-            <button class="seq-step active" data-step="2" data-note="1174.66"></button>
-            <button class="seq-step" data-step="3" data-note="987.77"></button>
-            <button class="seq-step active" data-step="4" data-note="1318.51"></button>
-            <button class="seq-step" data-step="5" data-note="1174.66"></button>
-            <button class="seq-step active" data-step="6" data-note="1567.98"></button>
-            <button class="seq-step active" data-step="7" data-note="1318.51"></button>
+            <button class="seq-step active" data-step="0" data-note="880" type="button"></button>
+            <button class="seq-step" data-step="1" data-note="987.77" type="button"></button>
+            <button class="seq-step active" data-step="2" data-note="1174.66" type="button"></button>
+            <button class="seq-step" data-step="3" data-note="987.77" type="button"></button>
+            <button class="seq-step active" data-step="4" data-note="1318.51" type="button"></button>
+            <button class="seq-step" data-step="5" data-note="1174.66" type="button"></button>
+            <button class="seq-step active" data-step="6" data-note="1567.98" type="button"></button>
+            <button class="seq-step active" data-step="7" data-note="1318.51" type="button"></button>
           </div>
         </div>
 
@@ -168,14 +170,14 @@
         <div class="seq-track" data-track="pad">
           <span class="seq-track-name">HARMONIC PAD</span>
           <div class="seq-steps" id="steps-pad">
-            <button class="seq-step active" data-step="0" data-note="440"></button>
-            <button class="seq-step" data-step="1" data-note="440"></button>
-            <button class="seq-step active" data-step="2" data-note="523.25"></button>
-            <button class="seq-step" data-step="3" data-note="523.25"></button>
-            <button class="seq-step active" data-step="4" data-note="587.33"></button>
-            <button class="seq-step" data-step="5" data-note="587.33"></button>
-            <button class="seq-step active" data-step="6" data-note="659.25"></button>
-            <button class="seq-step" data-step="7" data-note="659.25"></button>
+            <button class="seq-step active" data-step="0" data-note="440" type="button"></button>
+            <button class="seq-step" data-step="1" data-note="440" type="button"></button>
+            <button class="seq-step active" data-step="2" data-note="523.25" type="button"></button>
+            <button class="seq-step" data-step="3" data-note="523.25" type="button"></button>
+            <button class="seq-step active" data-step="4" data-note="587.33" type="button"></button>
+            <button class="seq-step" data-step="5" data-note="587.33" type="button"></button>
+            <button class="seq-step active" data-step="6" data-note="659.25" type="button"></button>
+            <button class="seq-step" data-step="7" data-note="659.25" type="button"></button>
           </div>
         </div>
 
@@ -183,19 +185,19 @@
         <div class="seq-track" data-track="bass">
           <span class="seq-track-name">QUANTUM BASS</span>
           <div class="seq-steps" id="steps-bass">
-            <button class="seq-step active" data-step="0" data-note="110"></button>
-            <button class="seq-step" data-step="1" data-note="110"></button>
-            <button class="seq-step" data-step="2" data-note="110"></button>
-            <button class="seq-step active" data-step="3" data-note="110"></button>
-            <button class="seq-step active" data-step="4" data-note="146.83"></button>
-            <button class="seq-step" data-step="5" data-note="146.83"></button>
-            <button class="seq-step active" data-step="6" data-note="164.81"></button>
-            <button class="seq-step" data-step="7" data-note="130.81"></button>
+            <button class="seq-step active" data-step="0" data-note="110" type="button"></button>
+            <button class="seq-step" data-step="1" data-note="110" type="button"></button>
+            <button class="seq-step" data-step="2" data-note="110" type="button"></button>
+            <button class="seq-step active" data-step="3" data-note="110" type="button"></button>
+            <button class="seq-step active" data-step="4" data-note="146.83" type="button"></button>
+            <button class="seq-step" data-step="5" data-note="146.83" type="button"></button>
+            <button class="seq-step active" data-step="6" data-note="164.81" type="button"></button>
+            <button class="seq-step" data-step="7" data-note="130.81" type="button"></button>
           </div>
         </div>
       </div>
     </div>
-  </main>
+  </div>
 
   <!-- Interactive Control Deck (Bottom Floating HUD) -->
   <footer class="control-deck">
@@ -203,10 +205,10 @@
     <div class="control-group">
       <span class="control-group-title">PHYSICS ENGINE</span>
       <div class="segmented-control" role="tablist">
-        <button class="segment active" data-mode="constellation" role="tab">Quantum Net</button>
-        <button class="segment" data-mode="matrix" role="tab">Matrix 3.0</button>
-        <button class="segment" data-mode="vortex" role="tab">Vortex Warp</button>
-        <button class="segment" data-mode="singularity" role="tab">Singularity</button>
+        <button class="segment active" data-mode="constellation" role="tab" type="button">Quantum Net</button>
+        <button class="segment" data-mode="matrix" role="tab" type="button">Matrix 3.0</button>
+        <button class="segment" data-mode="vortex" role="tab" type="button">Vortex Warp</button>
+        <button class="segment" data-mode="singularity" role="tab" type="button">Singularity</button>
       </div>
     </div>
 
@@ -214,11 +216,11 @@
     <div class="control-group">
       <span class="control-group-title">COLOR AURA</span>
       <div class="theme-palette-picker">
-        <button class="theme-chip active" data-theme="neon" title="Cyber Neon" style="--chip-c1: #00f0ff; --chip-c2: #ff007f;"></button>
-        <button class="theme-chip" data-theme="violet" title="Galactic Violet" style="--chip-c1: #a855f7; --chip-c2: #3b82f6;"></button>
-        <button class="theme-chip" data-theme="solar" title="Solar Flare" style="--chip-c1: #ff7e5f; --chip-c2: #feb47b;"></button>
-        <button class="theme-chip" data-theme="matrix" title="Emerald Grid" style="--chip-c1: #00ff88; --chip-c2: #006633;"></button>
-        <button class="theme-chip" data-theme="gold" title="Tokyo Gold" style="--chip-c1: #ffd700; --chip-c2: #ff6b35;"></button>
+        <button class="theme-chip active" data-theme="neon" title="Cyber Neon" style="--chip-c1: #00f0ff; --chip-c2: #ff007f;" type="button"></button>
+        <button class="theme-chip" data-theme="violet" title="Galactic Violet" style="--chip-c1: #a855f7; --chip-c2: #3b82f6;" type="button"></button>
+        <button class="theme-chip" data-theme="solar" title="Solar Flare" style="--chip-c1: #ff7e5f; --chip-c2: #feb47b;" type="button"></button>
+        <button class="theme-chip" data-theme="matrix" title="Emerald Grid" style="--chip-c1: #00ff88; --chip-c2: #006633;" type="button"></button>
+        <button class="theme-chip" data-theme="gold" title="Tokyo Gold" style="--chip-c1: #ffd700; --chip-c2: #ff6b35;" type="button"></button>
       </div>
     </div>
   </footer>

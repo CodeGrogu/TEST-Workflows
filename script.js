@@ -313,11 +313,15 @@ function toggleSequencerPlayback() {
   isSeqPlaying = !isSeqPlaying;
   const btnPlay = document.getElementById('btn-seq-play');
   if (isSeqPlaying) {
-    if (btnPlay) btnPlay.innerHTML = '<span>Stop Pattern</span>';
+    if (btnPlay) {
+      btnPlay.innerHTML = '<svg class="seq-play-icon" width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="4" width="4" height="16"></rect><rect x="14" y="4" width="4" height="16"></rect></svg><span>Stop Pattern</span>';
+    }
     const intervalMs = (60 / bpm / 2) * 1000;
     seqIntervalId = setInterval(runSequencerStep, intervalMs);
   } else {
-    if (btnPlay) btnPlay.innerHTML = '<svg class="seq-play-icon" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg><span>Play Pattern</span>';
+    if (btnPlay) {
+      btnPlay.innerHTML = '<svg class="seq-play-icon" width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg><span>Play Pattern</span>';
+    }
     clearInterval(seqIntervalId);
     document.querySelectorAll('.seq-step').forEach(btn => btn.classList.remove('playing'));
   }

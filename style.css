@@ -8,8 +8,8 @@
 
   /* Cyber Neon (Default) */
   --bg-dark: #070913;
-  --bg-surface: rgba(13, 17, 34, 0.7);
-  --bg-surface-hover: rgba(22, 28, 56, 0.85);
+  --bg-surface: rgba(13, 17, 34, 0.75);
+  --bg-surface-hover: rgba(22, 28, 56, 0.9);
   
   --accent-cyan: #00f0ff;
   --accent-magenta: #ff007f;
@@ -189,10 +189,11 @@ html, body {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 1.25rem 2rem;
-  z-index: 10;
+  padding: 1rem 2rem;
+  z-index: 100;
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
+  background: rgba(7, 9, 19, 0.65);
   border-bottom: 1px solid var(--border-glass);
 }
 
@@ -239,10 +240,10 @@ html, body {
   display: flex;
   align-items: center;
   gap: 1rem;
-  background: rgba(0, 0, 0, 0.45);
+  background: rgba(0, 0, 0, 0.5);
   border: 1px solid var(--border-glass);
   border-radius: var(--pill-radius);
-  padding: 0.4rem 1.1rem;
+  padding: 0.35rem 1.1rem;
 }
 
 .telemetry-item {
@@ -275,35 +276,49 @@ html, body {
 .hud-quick-actions {
   display: flex;
   align-items: center;
-  gap: 0.65rem;
+  gap: 0.75rem;
 }
 
 .hud-btn {
   display: inline-flex;
+  flex-direction: row;
   align-items: center;
-  gap: 0.45rem;
-  padding: 0.45rem 0.9rem;
+  gap: 0.5rem;
+  padding: 0.45rem 0.95rem;
   border-radius: var(--pill-radius);
   background: rgba(255, 255, 255, 0.07);
   border: 1px solid var(--border-glass);
   color: var(--text-main);
   font-family: var(--font-primary);
-  font-size: 0.78rem;
+  font-size: 0.8rem;
   font-weight: 600;
   cursor: pointer;
+  height: 36px;
   transition: all var(--transition-fast);
 }
 
 .hud-btn:hover {
-  background: rgba(255, 255, 255, 0.15);
+  background: rgba(255, 255, 255, 0.16);
   border-color: var(--accent-primary);
-  box-shadow: 0 0 12px var(--border-glow);
+  box-shadow: 0 0 14px var(--border-glow);
   transform: translateY(-1px);
 }
 
+.hud-btn span {
+  display: inline-block;
+  line-height: 1;
+  white-space: nowrap;
+}
+
 .hud-icon {
-  width: 14px;
-  height: 14px;
+  width: 16px;
+  height: 16px;
+  min-width: 16px;
+  min-height: 16px;
+  max-width: 16px;
+  max-height: 16px;
+  flex-shrink: 0;
+  display: block;
 }
 
 /* ==========================================================================
@@ -329,7 +344,7 @@ html, body {
 
 .glass-card {
   position: relative;
-  width: min(92vw, 680px);
+  width: min(92vw, 660px);
   padding: 3.5rem 3rem 3rem;
   background: var(--bg-surface);
   backdrop-filter: blur(28px) saturate(180%);
@@ -494,6 +509,7 @@ html, body {
 .btn-icon {
   width: 17px;
   height: 17px;
+  flex-shrink: 0;
 }
 
 .btn-primary {
@@ -526,31 +542,36 @@ html, body {
 }
 
 /* ==========================================================================
-   8-Step Cyber Sequencer HUD Drawer
+   8-Step Cyber Sequencer HUD Modal / Drawer
    ========================================================================== */
 .sequencer-drawer {
   position: fixed;
-  bottom: 6rem;
+  bottom: 5.5rem;
   left: 50%;
-  transform: translateX(-50%) translateY(20px);
+  transform: translateX(-50%) translateY(30px);
   width: min(94vw, 760px);
-  background: rgba(10, 14, 30, 0.92);
-  backdrop-filter: blur(32px) saturate(190%);
-  -webkit-backdrop-filter: blur(32px) saturate(190%);
-  border: 1px solid var(--border-glass);
-  border-radius: 20px;
-  box-shadow: 0 24px 60px -10px rgba(0, 0, 0, 0.8), 0 0 30px -10px var(--border-glow);
-  padding: 1.5rem;
-  z-index: 20;
+  z-index: 150;
   opacity: 0;
+  visibility: hidden;
   pointer-events: none;
   transition: all var(--transition-smooth);
 }
 
 .sequencer-drawer.open {
   opacity: 1;
+  visibility: visible;
   pointer-events: auto;
   transform: translateX(-50%) translateY(0);
+}
+
+.sequencer-inner {
+  background: rgba(10, 14, 30, 0.95);
+  backdrop-filter: blur(32px) saturate(190%);
+  -webkit-backdrop-filter: blur(32px) saturate(190%);
+  border: 1px solid var(--border-glow);
+  border-radius: 24px;
+  box-shadow: 0 28px 70px -10px rgba(0, 0, 0, 0.9), 0 0 35px -10px var(--border-glow);
+  padding: 1.5rem 1.75rem;
 }
 
 .sequencer-header {
@@ -582,12 +603,13 @@ html, body {
   font-family: var(--font-display);
   font-size: 1.05rem;
   font-weight: 700;
+  color: #ffffff;
 }
 
 .sequencer-controls-top {
   display: flex;
   align-items: center;
-  gap: 1.25rem;
+  gap: 1.1rem;
 }
 
 .bpm-control {
@@ -629,21 +651,33 @@ html, body {
 .seq-play-icon {
   width: 14px;
   height: 14px;
+  min-width: 14px;
+  min-height: 14px;
+  max-width: 14px;
+  max-height: 14px;
+  flex-shrink: 0;
+  display: block;
 }
 
 .btn-seq-close {
-  background: transparent;
-  border: none;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid var(--border-glass);
   color: var(--text-muted);
-  font-size: 1.5rem;
+  font-size: 1.25rem;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   cursor: pointer;
   line-height: 1;
-  padding: 0.2rem 0.5rem;
-  transition: color var(--transition-fast);
+  transition: all var(--transition-fast);
 }
 
 .btn-seq-close:hover {
-  color: var(--text-main);
+  background: rgba(255, 255, 255, 0.2);
+  color: #ffffff;
 }
 
 .sequencer-matrix {
@@ -664,6 +698,7 @@ html, body {
   font-size: 0.68rem;
   font-weight: 600;
   color: var(--text-muted);
+  flex-shrink: 0;
 }
 
 .seq-steps {
@@ -674,9 +709,10 @@ html, body {
 }
 
 .seq-step {
-  height: 38px;
+  height: 36px;
+  width: 100%;
   border-radius: 8px;
-  background: rgba(255, 255, 255, 0.05);
+  background: rgba(255, 255, 255, 0.06);
   border: 1px solid var(--border-glass);
   cursor: pointer;
   transition: all var(--transition-fast);
@@ -720,14 +756,14 @@ html, body {
   display: flex;
   align-items: center;
   gap: 2rem;
-  padding: 0.85rem 1.75rem;
-  background: rgba(13, 17, 34, 0.82);
+  padding: 0.75rem 1.75rem;
+  background: rgba(13, 17, 34, 0.85);
   backdrop-filter: blur(24px) saturate(180%);
   -webkit-backdrop-filter: blur(24px) saturate(180%);
   border: 1px solid var(--border-glass);
   border-radius: var(--pill-radius);
   box-shadow: 0 16px 40px -10px rgba(0, 0, 0, 0.6);
-  z-index: 10;
+  z-index: 90;
   max-width: 94vw;
 }
 
@@ -808,7 +844,7 @@ html, body {
    ========================================================================== */
 @media (max-width: 860px) {
   .hud-header {
-    padding: 1rem 1.25rem;
+    padding: 0.85rem 1rem;
   }
   .telemetry-bar {
     display: none;
@@ -820,7 +856,7 @@ html, body {
     bottom: 1rem;
     flex-direction: column;
     gap: 0.8rem;
-    padding: 0.85rem 1.25rem;
+    padding: 0.75rem 1.25rem;
   }
   .control-group-title {
     display: none;
@@ -828,5 +864,8 @@ html, body {
   .seq-track-name {
     width: 80px;
     font-size: 0.6rem;
+  }
+  .sequencer-drawer {
+    bottom: 5rem;
   }
 }
