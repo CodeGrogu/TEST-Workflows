@@ -7,7 +7,7 @@ import { fileURLToPath } from "node:url";
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const rootDir = path.resolve(__dirname, "..");
 
-test("HTML Structure Integrity & HUD Elements", () => {
+test("HTML Structure Integrity & v3.0 HUD Elements", () => {
   const htmlPath = path.join(rootDir, "index.html");
   assert.ok(fs.existsSync(htmlPath), "index.html must exist");
   
@@ -17,13 +17,16 @@ test("HTML Structure Integrity & HUD Elements", () => {
   assert.ok(content.includes('class="glass-card"'), "Must include glass-card stage element");
   assert.ok(content.includes('class="hero-text"'), "Must include hero-text element");
   assert.ok(content.includes('class="telemetry-bar"'), "Must include telemetry HUD bar");
+  assert.ok(content.includes('id="btn-snapshot"'), "Must include snapshot studio button");
+  assert.ok(content.includes('id="btn-toggle-sequencer"'), "Must include sequencer toggle button");
+  assert.ok(content.includes('id="sequencer-drawer"'), "Must include 8-step sequencer drawer");
   assert.ok(content.includes('id="btn-burst"'), "Must include supernova burst trigger button");
   assert.ok(content.includes('id="btn-audio-toggle"'), "Must include audio toggle button");
   assert.ok(content.includes('class="segmented-control"'), "Must include particle engine mode selector");
   assert.ok(content.includes('class="theme-palette-picker"'), "Must include theme palette picker");
 });
 
-test("CSS Design System & Dynamic Themes", () => {
+test("CSS Design System & v3.0 Themes", () => {
   const cssPath = path.join(rootDir, "style.css");
   assert.ok(fs.existsSync(cssPath), "style.css must exist");
   
@@ -32,11 +35,13 @@ test("CSS Design System & Dynamic Themes", () => {
   assert.ok(content.includes('[data-theme="violet"]'), "Must support violet theme");
   assert.ok(content.includes('[data-theme="solar"]'), "Must support solar theme");
   assert.ok(content.includes('[data-theme="matrix"]'), "Must support matrix theme");
+  assert.ok(content.includes('[data-theme="gold"]'), "Must support tokyo gold theme");
+  assert.ok(content.includes(".sequencer-drawer"), "Must style sequencer drawer");
   assert.ok(content.includes(".control-deck"), "Must style floating control deck HUD");
   assert.ok(content.includes(".glass-card"), "Must style glass card component");
 });
 
-test("JavaScript Engine & Interactive Features", () => {
+test("JavaScript Engine & v3.0 Interactive Synthesizer Features", () => {
   const jsPath = path.join(rootDir, "script.js");
   assert.ok(fs.existsSync(jsPath), "script.js must exist");
   
@@ -45,6 +50,8 @@ test("JavaScript Engine & Interactive Features", () => {
   assert.ok(content.includes("class BurstParticle"), "Must define BurstParticle class");
   assert.ok(content.includes("drawMatrixStream"), "Must include matrix stream engine");
   assert.ok(content.includes("triggerSynthesizerChord"), "Must include Web Audio synth engine");
+  assert.ok(content.includes("toggleSequencerPlayback"), "Must include 8-step sequencer controller");
+  assert.ok(content.includes("drawAudioSpectrum"), "Must include live FFT audio spectrum visualizer");
   assert.ok(content.includes("probeHealthStatus"), "Must include health probe integration");
 });
 

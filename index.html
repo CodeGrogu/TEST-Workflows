@@ -3,11 +3,11 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Quantum Studio — Next-Gen Interactive Experience</title>
-  <meta name="description" content="Next-generation interactive cybernetic canvas, particle physics synthesizer, and dynamic visual playground.">
+  <title>Quantum Studio v3.0 — Cybernetic Audio-Visual Synthesizer</title>
+  <meta name="description" content="Next-generation interactive cybernetic canvas, Web Audio polyphonic synthesizer, step sequencer, and spatial physics playground.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800;900&family=Space+Grotesk:wght@400;500;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;800;900&family=Space+Grotesk:wght@400;500;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -16,10 +16,10 @@
   <div class="ambient-glow glow-2"></div>
   <div class="ambient-glow glow-3"></div>
 
-  <!-- Interactive Canvas Particle Layer -->
+  <!-- Interactive Canvas Particle & Audio Spectrum Layer -->
   <canvas id="bg-canvas"></canvas>
 
-  <!-- Cursor Spotlight & Follower -->
+  <!-- Cursor Spotlight & Gravity Field Indicator -->
   <div id="cursor-glow" class="cursor-glow"></div>
 
   <!-- Top Navigation & Telemetry HUD -->
@@ -27,9 +27,10 @@
     <div class="brand-badge">
       <span class="status-indicator"></span>
       <span class="brand-title">QUANTUM.IO</span>
-      <span class="badge-tag">v2.0 PRO</span>
+      <span class="badge-tag">v3.0 ULTRA</span>
     </div>
 
+    <!-- Live Telemetry Monitor Bar -->
     <div class="telemetry-bar">
       <div class="telemetry-item">
         <span class="telemetry-label">FPS</span>
@@ -38,13 +39,42 @@
       <div class="telemetry-divider"></div>
       <div class="telemetry-item">
         <span class="telemetry-label">PARTICLES</span>
-        <span class="telemetry-val" id="hud-particles">120</span>
+        <span class="telemetry-val" id="hud-particles">140</span>
+      </div>
+      <div class="telemetry-divider"></div>
+      <div class="telemetry-item">
+        <span class="telemetry-label">AUDIO FFT</span>
+        <span class="telemetry-val" id="hud-audio-energy">0%</span>
       </div>
       <div class="telemetry-divider"></div>
       <div class="telemetry-item">
         <span class="telemetry-label">SYSTEM</span>
-        <span class="telemetry-val status-up" id="hud-status">HEALTHY</span>
+        <span class="telemetry-val status-up" id="hud-status">ONLINE</span>
       </div>
+    </div>
+
+    <!-- Quick Action Utilities -->
+    <div class="hud-quick-actions">
+      <button class="hud-btn" id="btn-snapshot" title="Capture High-Res Wallpaper">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="hud-icon">
+          <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path>
+          <circle cx="12" cy="13" r="4"></circle>
+        </svg>
+        <span>Snapshot</span>
+      </button>
+      <button class="hud-btn" id="btn-toggle-sequencer" title="Open 8-Step Cyber Sequencer">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="hud-icon">
+          <rect x="2" y="2" width="20" height="20" rx="2.18" ry="2.18"></rect>
+          <line x1="7" y1="2" x2="7" y2="22"></line>
+          <line x1="17" y1="2" x2="17" y2="22"></line>
+          <line x1="2" y1="12" x2="22" y2="12"></line>
+          <line x1="2" y1="7" x2="7" y2="7"></line>
+          <line x1="2" y1="17" x2="7" y2="17"></line>
+          <line x1="17" y1="17" x2="22" y2="17"></line>
+          <line x1="17" y1="7" x2="22" y2="7"></line>
+        </svg>
+        <span>Sequencer</span>
+      </button>
     </div>
   </header>
 
@@ -57,9 +87,9 @@
         <div class="glass-reflection"></div>
         
         <div class="card-header-meta">
-          <span class="card-eyebrow">HOLOGRAPHIC QUANTUM RUNTIME</span>
+          <span class="card-eyebrow">HOLOGRAPHIC SPATIAL ENGINE</span>
           <div class="audio-visualizer-mini" id="audio-mini-bars">
-            <span class="bar"></span><span class="bar"></span><span class="bar"></span><span class="bar"></span>
+            <span class="bar"></span><span class="bar"></span><span class="bar"></span><span class="bar"></span><span class="bar"></span><span class="bar"></span>
           </div>
         </div>
 
@@ -73,7 +103,7 @@
         </div>
 
         <p class="hero-subtitle">
-          Interactive particle mesh • Neural audio synthesizer • Ultra-low latency canvas
+          Real-time particle simulation • Web Audio polyphonic synthesizer • 8-step sequencer • Interactive gravity well
         </p>
 
         <!-- Interactive Action Quick Buttons -->
@@ -82,7 +112,7 @@
             <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
               <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
             </svg>
-            Trigger Supernova
+            Trigger Supernova (Space)
           </button>
           <button class="btn btn-secondary" id="btn-audio-toggle">
             <svg class="btn-icon" id="audio-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -94,17 +124,89 @@
         </div>
       </div>
     </div>
+
+    <!-- Floating 8-Step Interactive Cyber Sequencer HUD Drawer -->
+    <div class="sequencer-drawer" id="sequencer-drawer">
+      <div class="sequencer-header">
+        <div class="sequencer-title-wrap">
+          <span class="sequencer-badge">SYNTH ENGINE</span>
+          <h3 class="sequencer-title">8-Step Cyber Sequencer</h3>
+        </div>
+        <div class="sequencer-controls-top">
+          <div class="bpm-control">
+            <span class="bpm-label">BPM: <strong id="bpm-val">128</strong></span>
+            <input type="range" id="bpm-slider" min="60" max="180" value="128">
+          </div>
+          <button class="btn-seq-play" id="btn-seq-play">
+            <svg class="seq-play-icon" viewBox="0 0 24 24" fill="currentColor">
+              <polygon points="5 3 19 12 5 21 5 3"></polygon>
+            </svg>
+            <span>Play Pattern</span>
+          </button>
+          <button class="btn-seq-close" id="btn-seq-close">&times;</button>
+        </div>
+      </div>
+
+      <!-- Sequencer Step Matrix -->
+      <div class="sequencer-matrix">
+        <!-- Track 1: Lead Melody (High Arp) -->
+        <div class="seq-track" data-track="lead">
+          <span class="seq-track-name">LEAD SYNTH</span>
+          <div class="seq-steps" id="steps-lead">
+            <button class="seq-step active" data-step="0" data-note="880"></button>
+            <button class="seq-step" data-step="1" data-note="987.77"></button>
+            <button class="seq-step active" data-step="2" data-note="1174.66"></button>
+            <button class="seq-step" data-step="3" data-note="987.77"></button>
+            <button class="seq-step active" data-step="4" data-note="1318.51"></button>
+            <button class="seq-step" data-step="5" data-note="1174.66"></button>
+            <button class="seq-step active" data-step="6" data-note="1567.98"></button>
+            <button class="seq-step active" data-step="7" data-note="1318.51"></button>
+          </div>
+        </div>
+
+        <!-- Track 2: Harmonic Pad / Chords -->
+        <div class="seq-track" data-track="pad">
+          <span class="seq-track-name">HARMONIC PAD</span>
+          <div class="seq-steps" id="steps-pad">
+            <button class="seq-step active" data-step="0" data-note="440"></button>
+            <button class="seq-step" data-step="1" data-note="440"></button>
+            <button class="seq-step active" data-step="2" data-note="523.25"></button>
+            <button class="seq-step" data-step="3" data-note="523.25"></button>
+            <button class="seq-step active" data-step="4" data-note="587.33"></button>
+            <button class="seq-step" data-step="5" data-note="587.33"></button>
+            <button class="seq-step active" data-step="6" data-note="659.25"></button>
+            <button class="seq-step" data-step="7" data-note="659.25"></button>
+          </div>
+        </div>
+
+        <!-- Track 3: Sub-Bass / Pulse -->
+        <div class="seq-track" data-track="bass">
+          <span class="seq-track-name">QUANTUM BASS</span>
+          <div class="seq-steps" id="steps-bass">
+            <button class="seq-step active" data-step="0" data-note="110"></button>
+            <button class="seq-step" data-step="1" data-note="110"></button>
+            <button class="seq-step" data-step="2" data-note="110"></button>
+            <button class="seq-step active" data-step="3" data-note="110"></button>
+            <button class="seq-step active" data-step="4" data-note="146.83"></button>
+            <button class="seq-step" data-step="5" data-note="146.83"></button>
+            <button class="seq-step active" data-step="6" data-note="164.81"></button>
+            <button class="seq-step" data-step="7" data-note="130.81"></button>
+          </div>
+        </div>
+      </div>
+    </div>
   </main>
 
   <!-- Interactive Control Deck (Bottom Floating HUD) -->
   <footer class="control-deck">
     <!-- Visual Particle Engine Modes -->
     <div class="control-group">
-      <span class="control-group-title">VISUAL ENGINE</span>
+      <span class="control-group-title">PHYSICS ENGINE</span>
       <div class="segmented-control" role="tablist">
         <button class="segment active" data-mode="constellation" role="tab">Quantum Net</button>
-        <button class="segment" data-mode="matrix" role="tab">Matrix Stream</button>
+        <button class="segment" data-mode="matrix" role="tab">Matrix 3.0</button>
         <button class="segment" data-mode="vortex" role="tab">Vortex Warp</button>
+        <button class="segment" data-mode="singularity" role="tab">Singularity</button>
       </div>
     </div>
 
@@ -116,6 +218,7 @@
         <button class="theme-chip" data-theme="violet" title="Galactic Violet" style="--chip-c1: #a855f7; --chip-c2: #3b82f6;"></button>
         <button class="theme-chip" data-theme="solar" title="Solar Flare" style="--chip-c1: #ff7e5f; --chip-c2: #feb47b;"></button>
         <button class="theme-chip" data-theme="matrix" title="Emerald Grid" style="--chip-c1: #00ff88; --chip-c2: #006633;"></button>
+        <button class="theme-chip" data-theme="gold" title="Tokyo Gold" style="--chip-c1: #ffd700; --chip-c2: #ff6b35;"></button>
       </div>
     </div>
   </footer>

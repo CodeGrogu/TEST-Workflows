@@ -1,10 +1,10 @@
 /**
- * Quantum Studio v2.0
- * Interactive Particle Engine, Web Audio Synthesizer & Telemetry HUD
+ * Quantum Studio v3.0 Ultra
+ * Cybernetic Audio-Visual Synthesizer, 8-Step Sequencer & Spatial Particle Simulator
  */
 
 // ==========================================================================
-// 1. Canvas Particle Engine & Modes
+// 1. Canvas Particle Engine & State
 // ==========================================================================
 const canvas = document.getElementById('bg-canvas');
 const ctx = canvas.getContext('2d');
@@ -13,14 +13,16 @@ let width, height;
 let particles = [];
 let burstParticles = [];
 let matrixDrops = [];
-let currentEngineMode = 'constellation'; // 'constellation' | 'matrix' | 'vortex'
+let currentEngineMode = 'constellation'; // 'constellation' | 'matrix' | 'vortex' | 'singularity'
 let currentTheme = 'neon';
+let isMouseDown = false;
 
 const themeColors = {
-  neon: { p1: '#00f0ff', p2: '#ff007f', glow: 'rgba(0, 240, 255, 0.4)' },
-  violet: { p1: '#a855f7', p2: '#3b82f6', glow: 'rgba(168, 85, 247, 0.4)' },
-  solar: { p1: '#ff7e5f', p2: '#feb47b', glow: 'rgba(255, 126, 95, 0.4)' },
-  matrix: { p1: '#00ff88', p2: '#00b4d8', glow: 'rgba(0, 255, 136, 0.4)' },
+  neon: { p1: '#00f0ff', p2: '#ff007f', glow: 'rgba(0, 240, 255, 0.45)' },
+  violet: { p1: '#a855f7', p2: '#3b82f6', glow: 'rgba(168, 85, 247, 0.5)' },
+  solar: { p1: '#ff7e5f', p2: '#feb47b', glow: 'rgba(255, 126, 95, 0.5)' },
+  matrix: { p1: '#00ff88', p2: '#00b4d8', glow: 'rgba(0, 255, 136, 0.5)' },
+  gold: { p1: '#ffd700', p2: '#ff6b35', glow: 'rgba(255, 215, 0, 0.5)' },
 };
 
 function resize() {
@@ -30,25 +32,25 @@ function resize() {
 }
 window.addEventListener('resize', resize);
 
-const mouse = { x: null, y: null, radius: 160 };
+const mouse = { x: null, y: null, radius: 180 };
 
 class Particle {
-  constructor(isVortex = false) {
-    this.reset(isVortex);
+  constructor(mode = 'constellation') {
+    this.reset(mode);
   }
 
-  reset(isVortex = false) {
-    if (isVortex) {
+  reset(mode = 'constellation') {
+    if (mode === 'vortex' || mode === 'singularity') {
       this.angle = Math.random() * Math.PI * 2;
-      this.radius = Math.random() * Math.max(width, height) * 0.6;
-      this.speed = (Math.random() * 2 + 1) * 0.015;
-      this.size = Math.random() * 2 + 1;
+      this.radius = Math.random() * Math.max(width, height) * 0.55 + 20;
+      this.speed = (Math.random() * 2 + 1) * 0.02;
+      this.size = Math.random() * 2.2 + 1;
       this.color = Math.random() > 0.4 ? themeColors[currentTheme].p1 : themeColors[currentTheme].p2;
     } else {
       this.x = Math.random() * width;
       this.y = Math.random() * height;
-      this.vx = (Math.random() - 0.5) * 1.2;
-      this.vy = (Math.random() - 0.5) * 1.2;
+      this.vx = (Math.random() - 0.5) * 1.3;
+      this.vy = (Math.random() - 0.5) * 1.3;
       this.size = Math.random() * 2.5 + 1;
       this.color = Math.random() > 0.4 ? themeColors[currentTheme].p1 : themeColors[currentTheme].p2;
     }
@@ -57,14 +59,32 @@ class Particle {
   update() {
     if (currentEngineMode === 'vortex') {
       this.angle += this.speed;
-      this.radius -= 0.6;
+      this.radius -= 0.7;
       if (this.radius <= 5) {
-        this.radius = Math.max(width, height) * 0.6;
+        this.radius = Math.max(width, height) * 0.55;
       }
       const cx = width / 2;
       const cy = height / 2;
       this.x = cx + Math.cos(this.angle) * this.radius;
       this.y = cy + Math.sin(this.angle) * this.radius;
+    } else if (currentEngineMode === 'singularity') {
+      const targetX = mouse.x ?? width / 2;
+      const targetY = mouse.y ?? height / 2;
+      const dx = targetX - this.x;
+      const dy = targetY - this.y;
+      const dist = Math.hypot(dx, dy);
+      
+      this.angle = (this.angle || Math.random() * Math.PI * 2) + 0.04;
+      if (dist < 10) {
+        this.x = targetX + Math.cos(this.angle) * (Math.random() * 300 + 50);
+        this.y = targetY + Math.sin(this.angle) * (Math.random() * 300 + 50);
+      } else {
+        const force = Math.min(250 / (dist + 50), 4);
+        this.vx = (this.vx || 0) * 0.95 + (dx / dist) * force;
+        this.vy = (this.vy || 0) * 0.95 + (dy / dist) * force;
+        this.x += this.vx;
+        this.y += this.vy;
+      }
     } else {
       this.x += this.vx;
       this.y += this.vy;
@@ -72,15 +92,16 @@ class Particle {
       if (this.x < 0 || this.x > width) this.vx *= -1;
       if (this.y < 0 || this.y > height) this.vy *= -1;
 
-      // Mouse repulsion
+      // Cursor gravity interaction (repulsion vs attraction on mousedown)
       if (mouse.x != null && mouse.y != null) {
         const dx = this.x - mouse.x;
         const dy = this.y - mouse.y;
         const dist = Math.hypot(dx, dy);
         if (dist < mouse.radius && dist > 0) {
           const force = (mouse.radius - dist) / mouse.radius;
-          this.x += (dx / dist) * force * 5;
-          this.y += (dy / dist) * force * 5;
+          const direction = isMouseDown ? -1 : 1;
+          this.x += (dx / dist) * force * 5.5 * direction;
+          this.y += (dy / dist) * force * 5.5 * direction;
         }
       }
     }
@@ -102,7 +123,7 @@ class BurstParticle {
     this.x = x;
     this.y = y;
     const angle = Math.random() * Math.PI * 2;
-    const speed = Math.random() * 7 + 3;
+    const speed = Math.random() * 8 + 3;
     this.vx = Math.cos(angle) * speed;
     this.vy = Math.sin(angle) * speed;
     this.life = 1;
@@ -135,12 +156,11 @@ class BurstParticle {
 function initEngine() {
   particles = [];
   burstParticles = [];
-  const count = Math.min(Math.floor((width * height) / 12000), 140);
+  const count = Math.min(Math.floor((width * height) / 11000), 160);
   for (let i = 0; i < count; i++) {
-    particles.push(new Particle(currentEngineMode === 'vortex'));
+    particles.push(new Particle(currentEngineMode));
   }
 
-  // Matrix column drops
   matrixDrops = [];
   const columns = Math.floor(width / 24);
   for (let i = 0; i < columns; i++) {
@@ -151,10 +171,10 @@ function initEngine() {
   if (hudParticles) hudParticles.textContent = count;
 }
 
-const matrixChars = '010101010101XYZΩΨ∆§#%*<>~';
+const matrixChars = '010101010101XYZΩΨ∆§#%*<>~⚡✦';
 
 function drawMatrixStream() {
-  ctx.fillStyle = 'rgba(7, 9, 19, 0.15)';
+  ctx.fillStyle = 'rgba(7, 9, 19, 0.16)';
   ctx.fillRect(0, 0, width, height);
 
   ctx.fillStyle = themeColors[currentTheme].p1;
@@ -174,7 +194,177 @@ function drawMatrixStream() {
   }
 }
 
-// Performance & FPS counter
+// ==========================================================================
+// 2. Web Audio Synthesizer & 8-Step Sequencer
+// ==========================================================================
+let audioEnabled = true;
+let audioCtx = null;
+let masterGain = null;
+let analyserNode = null;
+let analyserData = null;
+
+function initAudioContext() {
+  if (!audioCtx) {
+    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    masterGain = audioCtx.createGain();
+    masterGain.gain.value = 0.4;
+
+    analyserNode = audioCtx.createAnalyser();
+    analyserNode.fftSize = 64;
+    analyserData = new Uint8Array(analyserNode.frequencyBinCount);
+
+    masterGain.connect(analyserNode);
+    analyserNode.connect(audioCtx.destination);
+  }
+  if (audioCtx.state === 'suspended') {
+    audioCtx.resume();
+  }
+}
+
+const audioMiniBars = document.getElementById('audio-mini-bars');
+const hudAudioEnergy = document.getElementById('hud-audio-energy');
+
+function triggerSynthesizerChord() {
+  if (!audioEnabled) return;
+  try {
+    initAudioContext();
+    const chords = [523.25, 659.25, 783.99, 1046.50, 1318.51];
+    const now = audioCtx.currentTime;
+
+    if (audioMiniBars) {
+      audioMiniBars.classList.add('active');
+      setTimeout(() => audioMiniBars.classList.remove('active'), 1200);
+    }
+
+    chords.forEach((freq, index) => {
+      const osc = audioCtx.createOscillator();
+      const gain = audioCtx.createGain();
+
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(freq, now + index * 0.035);
+
+      gain.gain.setValueAtTime(0.001, now);
+      gain.gain.exponentialRampToValueAtTime(0.12 / (index + 1), now + index * 0.035 + 0.03);
+      gain.gain.exponentialRampToValueAtTime(0.0001, now + index * 0.035 + 1.1);
+
+      osc.connect(gain);
+      gain.connect(masterGain);
+
+      osc.start(now + index * 0.035);
+      osc.stop(now + index * 0.035 + 1.2);
+    });
+  } catch {
+    // Audio activation fallback
+  }
+}
+
+// 8-Step Sequencer Engine
+let isSeqPlaying = false;
+let currentStepIndex = 0;
+let seqIntervalId = null;
+let bpm = 128;
+
+function playSequencerNote(freq, type = 'sine', duration = 0.2) {
+  if (!audioEnabled || !audioCtx) return;
+  try {
+    const now = audioCtx.currentTime;
+    const osc = audioCtx.createOscillator();
+    const gain = audioCtx.createGain();
+
+    osc.type = type;
+    osc.frequency.setValueAtTime(freq, now);
+
+    gain.gain.setValueAtTime(0.001, now);
+    gain.gain.exponentialRampToValueAtTime(0.15, now + 0.02);
+    gain.gain.exponentialRampToValueAtTime(0.0001, now + duration);
+
+    osc.connect(gain);
+    gain.connect(masterGain);
+
+    osc.start(now);
+    osc.stop(now + duration + 0.05);
+  } catch {
+    // Ignore audio error
+  }
+}
+
+function runSequencerStep() {
+  document.querySelectorAll('.seq-step').forEach(btn => btn.classList.remove('playing'));
+
+  ['lead', 'pad', 'bass'].forEach(track => {
+    const trackEl = document.getElementById(`steps-${track}`);
+    if (!trackEl) return;
+    const stepBtn = trackEl.querySelector(`.seq-step[data-step="${currentStepIndex}"]`);
+    if (stepBtn) {
+      stepBtn.classList.add('playing');
+      if (stepBtn.classList.contains('active')) {
+        const noteFreq = parseFloat(stepBtn.dataset.note);
+        const oscType = track === 'bass' ? 'sawtooth' : track === 'lead' ? 'triangle' : 'sine';
+        playSequencerNote(noteFreq, oscType, track === 'pad' ? 0.35 : 0.15);
+      }
+    }
+  });
+
+  currentStepIndex = (currentStepIndex + 1) % 8;
+}
+
+function toggleSequencerPlayback() {
+  initAudioContext();
+  isSeqPlaying = !isSeqPlaying;
+  const btnPlay = document.getElementById('btn-seq-play');
+  if (isSeqPlaying) {
+    if (btnPlay) btnPlay.innerHTML = '<span>Stop Pattern</span>';
+    const intervalMs = (60 / bpm / 2) * 1000;
+    seqIntervalId = setInterval(runSequencerStep, intervalMs);
+  } else {
+    if (btnPlay) btnPlay.innerHTML = '<svg class="seq-play-icon" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg><span>Play Pattern</span>';
+    clearInterval(seqIntervalId);
+    document.querySelectorAll('.seq-step').forEach(btn => btn.classList.remove('playing'));
+  }
+}
+
+// Draw live audio spectrum ribbon
+function drawAudioSpectrum() {
+  if (!analyserNode || !analyserData) return;
+  analyserNode.getByteFrequencyData(analyserData);
+
+  let sum = 0;
+  for (let i = 0; i < analyserData.length; i++) {
+    sum += analyserData[i];
+  }
+  const avgEnergy = Math.round((sum / (analyserData.length * 255)) * 100);
+  if (hudAudioEnergy) hudAudioEnergy.textContent = `${avgEnergy}%`;
+
+  if (avgEnergy > 2) {
+    ctx.save();
+    ctx.strokeStyle = themeColors[currentTheme].p1;
+    ctx.lineWidth = 2;
+    ctx.shadowBlur = 10;
+    ctx.shadowColor = themeColors[currentTheme].p1;
+    ctx.beginPath();
+
+    const sliceWidth = width / analyserData.length;
+    let x = 0;
+
+    for (let i = 0; i < analyserData.length; i++) {
+      const v = analyserData[i] / 255.0;
+      const y = height - (v * 70);
+
+      if (i === 0) {
+        ctx.moveTo(x, y);
+      } else {
+        ctx.lineTo(x, y);
+      }
+      x += sliceWidth;
+    }
+    ctx.stroke();
+    ctx.restore();
+  }
+}
+
+// ==========================================================================
+// 3. Animation Loop & Telemetry
+// ==========================================================================
 let lastFrameTime = performance.now();
 let frameCount = 0;
 let fps = 60;
@@ -195,7 +385,6 @@ function animate() {
   } else {
     ctx.clearRect(0, 0, width, height);
 
-    // Draw mesh connection lines if in constellation mode
     if (currentEngineMode === 'constellation') {
       for (let i = 0; i < particles.length; i++) {
         for (let j = i + 1; j < particles.length; j++) {
@@ -216,19 +405,19 @@ function animate() {
       }
     }
 
-    // Update and draw particles
     particles.forEach(p => {
       p.update();
       p.draw();
     });
   }
 
-  // Update burst particles
   burstParticles = burstParticles.filter(bp => bp.life > 0);
   burstParticles.forEach(bp => {
     bp.update();
     bp.draw();
   });
+
+  drawAudioSpectrum();
 
   requestAnimationFrame(animate);
 }
@@ -237,7 +426,7 @@ resize();
 animate();
 
 // ==========================================================================
-// 2. Cursor Spotlight & 3D Tilt Stage
+// 4. Cursor Spotlight, 3D Tilt & Magnetic Physics
 // ==========================================================================
 const cursorGlow = document.getElementById('cursor-glow');
 const cardWrapper = document.getElementById('card-wrapper');
@@ -259,76 +448,28 @@ window.addEventListener('mousemove', (e) => {
   }
 });
 
+window.addEventListener('mousedown', () => {
+  isMouseDown = true;
+  if (cursorGlow) cursorGlow.classList.add('pulling');
+});
+
+window.addEventListener('mouseup', () => {
+  isMouseDown = false;
+  if (cursorGlow) cursorGlow.classList.remove('pulling');
+});
+
 window.addEventListener('mouseleave', () => {
   mouse.x = null;
   mouse.y = null;
+  isMouseDown = false;
   if (cardWrapper) cardWrapper.style.transform = 'rotateX(0deg) rotateY(0deg) scale(1)';
 });
 
 // ==========================================================================
-// 3. Web Audio Synthesizer Engine
-// ==========================================================================
-let audioEnabled = true;
-let audioCtx = null;
-const audioMiniBars = document.getElementById('audio-mini-bars');
-const btnAudioToggle = document.getElementById('btn-audio-toggle');
-const audioBtnText = document.getElementById('audio-btn-text');
-
-function triggerSynthesizerChord() {
-  if (!audioEnabled) return;
-  try {
-    if (!audioCtx) {
-      audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-    }
-    if (audioCtx.state === 'suspended') {
-      audioCtx.resume();
-    }
-
-    const chords = [523.25, 659.25, 783.99, 1046.50, 1318.51];
-    const now = audioCtx.currentTime;
-
-    if (audioMiniBars) {
-      audioMiniBars.classList.add('active');
-      setTimeout(() => audioMiniBars.classList.remove('active'), 1200);
-    }
-
-    chords.forEach((freq, index) => {
-      const osc = audioCtx.createOscillator();
-      const gain = audioCtx.createGain();
-
-      osc.type = 'sine';
-      osc.frequency.setValueAtTime(freq, now + index * 0.035);
-
-      gain.gain.setValueAtTime(0.001, now);
-      gain.gain.exponentialRampToValueAtTime(0.12 / (index + 1), now + index * 0.035 + 0.03);
-      gain.gain.exponentialRampToValueAtTime(0.0001, now + index * 0.035 + 1.1);
-
-      osc.connect(gain);
-      gain.connect(audioCtx.destination);
-
-      osc.start(now + index * 0.035);
-      osc.stop(now + index * 0.035 + 1.2);
-    });
-  } catch {
-    // Graceful fallback if audio is not yet activated
-  }
-}
-
-if (btnAudioToggle) {
-  btnAudioToggle.addEventListener('click', (e) => {
-    e.stopPropagation();
-    audioEnabled = !audioEnabled;
-    if (audioBtnText) audioBtnText.textContent = audioEnabled ? 'Audio Synth: ON' : 'Audio Synth: OFF';
-    btnAudioToggle.style.opacity = audioEnabled ? '1' : '0.6';
-    if (audioEnabled) triggerSynthesizerChord();
-  });
-}
-
-// ==========================================================================
-// 4. Interactive Supernova Burst & Letters
+// 5. Supernova Burst & Kinetic Letters
 // ==========================================================================
 function spawnSupernova(x, y) {
-  for (let i = 0; i < 55; i++) {
+  for (let i = 0; i < 65; i++) {
     burstParticles.push(new BurstParticle(x, y));
   }
   if (cardWrapper) {
@@ -355,7 +496,6 @@ if (card) {
   });
 }
 
-// Kinetic letter randomized tilt offsets
 const letters = document.querySelectorAll('.letter');
 letters.forEach(letter => {
   const rot = (Math.random() - 0.5) * 22;
@@ -363,8 +503,21 @@ letters.forEach(letter => {
 });
 
 // ==========================================================================
-// 5. Visual Mode Switcher & Theme Selector
+// 6. Audio Toggle, Modes, Themes & Snapshot
 // ==========================================================================
+const btnAudioToggle = document.getElementById('btn-audio-toggle');
+const audioBtnText = document.getElementById('audio-btn-text');
+
+if (btnAudioToggle) {
+  btnAudioToggle.addEventListener('click', (e) => {
+    e.stopPropagation();
+    audioEnabled = !audioEnabled;
+    if (audioBtnText) audioBtnText.textContent = audioEnabled ? 'Audio Synth: ON' : 'Audio Synth: OFF';
+    btnAudioToggle.style.opacity = audioEnabled ? '1' : '0.6';
+    if (audioEnabled) triggerSynthesizerChord();
+  });
+}
+
 const modeSegments = document.querySelectorAll('.segment');
 modeSegments.forEach(seg => {
   seg.addEventListener('click', () => {
@@ -388,8 +541,78 @@ themeChips.forEach(chip => {
   });
 });
 
+// Sequencer Drawer Toggles & Step Selection
+const seqDrawer = document.getElementById('sequencer-drawer');
+const btnToggleSeq = document.getElementById('btn-toggle-sequencer');
+const btnCloseSeq = document.getElementById('btn-seq-close');
+const btnSeqPlay = document.getElementById('btn-seq-play');
+const bpmSlider = document.getElementById('bpm-slider');
+const bpmVal = document.getElementById('bpm-val');
+
+if (btnToggleSeq) {
+  btnToggleSeq.addEventListener('click', () => {
+    seqDrawer.classList.toggle('open');
+    if (seqDrawer.classList.contains('open')) initAudioContext();
+  });
+}
+
+if (btnCloseSeq) {
+  btnCloseSeq.addEventListener('click', () => {
+    seqDrawer.classList.remove('open');
+  });
+}
+
+if (btnSeqPlay) {
+  btnSeqPlay.addEventListener('click', toggleSequencerPlayback);
+}
+
+if (bpmSlider) {
+  bpmSlider.addEventListener('input', (e) => {
+    bpm = parseInt(e.target.value, 10);
+    if (bpmVal) bpmVal.textContent = bpm;
+    if (isSeqPlaying) {
+      clearInterval(seqIntervalId);
+      const intervalMs = (60 / bpm / 2) * 1000;
+      seqIntervalId = setInterval(runSequencerStep, intervalMs);
+    }
+  });
+}
+
+document.querySelectorAll('.seq-step').forEach(btn => {
+  btn.addEventListener('click', () => {
+    btn.classList.toggle('active');
+    if (btn.classList.contains('active')) {
+      initAudioContext();
+      playSequencerNote(parseFloat(btn.dataset.note));
+    }
+  });
+});
+
+// Snapshot Wallpaper Exporter
+const btnSnapshot = document.getElementById('btn-snapshot');
+if (btnSnapshot) {
+  btnSnapshot.addEventListener('click', () => {
+    const link = document.createElement('a');
+    link.download = `quantum-studio-v3-${currentTheme}-${Date.now()}.png`;
+    link.href = canvas.toDataURL('image/png');
+    link.click();
+  });
+}
+
+// Keyboard shortcuts
+window.addEventListener('keydown', (e) => {
+  if (e.code === 'Space' && e.target === document.body) {
+    e.preventDefault();
+    spawnSupernova(mouse.x ?? width / 2, mouse.y ?? height / 2);
+  } else if (e.key === 's' || e.key === 'S') {
+    if (seqDrawer) seqDrawer.classList.toggle('open');
+  } else if (e.key === 'm' || e.key === 'M') {
+    if (btnAudioToggle) btnAudioToggle.click();
+  }
+});
+
 // ==========================================================================
-// 6. Live Telemetry & Health Probe
+// 7. Live Telemetry & Health Probe
 // ==========================================================================
 async function probeHealthStatus() {
   const hudStatus = document.getElementById('hud-status');
@@ -402,7 +625,6 @@ async function probeHealthStatus() {
       }
     }
   } catch {
-    // If running in local file/offline mode
     if (hudStatus) {
       hudStatus.textContent = 'LOCAL';
       hudStatus.className = 'telemetry-val';
