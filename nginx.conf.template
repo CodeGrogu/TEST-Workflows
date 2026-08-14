@@ -2,11 +2,11 @@ server {
     listen ${PORT};
     server_name localhost;
 
-    # Health check endpoint for Render health checks
+    # Health check endpoint for Render & Uptime monitoring
     location /health {
         access_log off;
-        default_type text/plain;
-        return 200 "healthy\n";
+        default_type application/json;
+        return 200 '{"status":"UP","timestamp":"$time_iso8601","service":"interactive-hero-app"}\n';
     }
 
     # Main application assets

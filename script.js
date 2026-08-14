@@ -157,8 +157,6 @@ animate();
 
 // Cursor tracking spotlight
 const cursorGlow = document.getElementById('cursor-glow');
-let cursorX = window.innerWidth / 2;
-let cursorY = window.innerHeight / 2;
 
 window.addEventListener('mousemove', (e) => {
   mouse.x = e.clientX;
@@ -233,14 +231,13 @@ function playFuturisticChime() {
       osc.start(now + index * 0.04);
       osc.stop(now + index * 0.04 + 1.3);
     });
-  } catch (err) {
+  } catch {
     // Audio might be blocked until user gesture, safe to ignore
   }
 }
 
 // Burst particles & Sound on Click
 card.addEventListener('click', (e) => {
-  const rect = card.getBoundingClientRect();
   const clickX = e.clientX;
   const clickY = e.clientY;
 
