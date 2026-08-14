@@ -1,0 +1,6 @@
+.git
+.gitignore
+.agents
+.gemini
+*.md
+render.yaml
