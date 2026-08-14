@@ -68,20 +68,24 @@ Create the core web application with semantic markup, dynamic design tokens, and
 
 1. **`index.html`**:
    - Semantic HTML5 structure with Google Fonts (`Outfit`, `Space Grotesk`, `JetBrains Mono`).
-   - `#bg-canvas` for hardware-accelerated animations.
-   - Dynamic Telemetry HUD (`#hud-fps`, `#hud-particles`, `#hud-status`).
-   - Holographic Glassmorphism stage card with 3D tilt and kinetic letters.
-   - Floating Control Deck for particle modes and theme color auras.
+   - `#bg-canvas` for hardware-accelerated animations and live audio spectrum rendering.
+   - Dynamic Telemetry HUD (`#hud-fps`, `#hud-particles`, `#hud-audio-energy`, `#hud-status`).
+   - 8-Step Interactive Cyber Sequencer HUD Drawer (`#sequencer-drawer`) with multi-track matrix and BPM tempo slider.
+   - Snapshot Studio button (`#btn-snapshot`) for instant 1-click 4K wallpaper exports.
+   - Holographic Glassmorphism stage card with 3D tilt, kinetic letters, and supernova burst triggers.
+   - Floating Control Deck for particle modes and 5 dynamic theme color auras.
 
 2. **`style.css`**:
-   - Centralized CSS Custom Properties under `:root` and theme attributes (`[data-theme="violet"]`, `[data-theme="solar"]`, `[data-theme="matrix"]`).
+   - Centralized CSS Custom Properties under `:root` and theme attributes (`[data-theme="violet"]`, `[data-theme="solar"]`, `[data-theme="matrix"]`, `[data-theme="gold"]`).
    - Backdrop-filter blurs (`backdrop-filter: blur(28px)`), luminous borders, and smooth cubic-bezier transitions.
+   - Sequencer drawer grid styling, active step pulses, step tracker highlights, and range slider styles.
    - Mobile-responsive media queries adapting the stage and collapsing telemetry bars on smaller viewports.
 
 3. **`script.js`**:
-   - **Canvas Particle Engine**: Supports `constellation` (mesh network), `matrix` (falling characters), and `vortex` (relativistic 3D spiral).
-   - **Web Audio Synth**: Generates polyphonic harmonic chords using `AudioContext` with exponential gain decay.
-   - **Live Telemetry Loop**: Measures instantaneous frame rate via `requestAnimationFrame` and performs asynchronous `/health` status probes.
+   - **Canvas Particle Engine**: Supports `constellation` (mesh network), `matrix` (falling characters), `vortex` (relativistic 3D spiral), and `singularity` (cursor gravitational field with relativistic orbital physics).
+   - **Web Audio Synth & 8-Step Sequencer**: Generates polyphonic harmonic chords using `AudioContext`, an 8-step sequencer loop with BPM tempo control, and Fast Fourier Transform (FFT) frequency spectrum visualization via `AnalyserNode`.
+   - **Live Telemetry Loop**: Measures instantaneous frame rate via `requestAnimationFrame`, live FFT audio energy %, and performs asynchronous `/health` status probes.
+   - **Snapshot Exporter**: Canvas to PNG data URL pipeline with automatic download.
 
 ---
 
