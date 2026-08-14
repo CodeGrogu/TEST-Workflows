@@ -1,5 +1,5 @@
 /* ==========================================================================
-   Design System & Dynamic CSS Custom Properties
+   Quantum Studio v3.0 — Master Design System & Dynamic Tokens
    ========================================================================== */
 :root {
   --font-primary: 'Outfit', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
@@ -8,8 +8,8 @@
 
   /* Cyber Neon (Default) */
   --bg-dark: #070913;
-  --bg-surface: rgba(13, 17, 34, 0.65);
-  --bg-surface-hover: rgba(22, 28, 56, 0.75);
+  --bg-surface: rgba(13, 17, 34, 0.7);
+  --bg-surface-hover: rgba(22, 28, 56, 0.85);
   
   --accent-cyan: #00f0ff;
   --accent-magenta: #ff007f;
@@ -17,16 +17,16 @@
   --accent-primary: #00f0ff;
   --accent-secondary: #ff007f;
   
-  --glow-1: rgba(0, 240, 255, 0.18);
-  --glow-2: rgba(255, 0, 127, 0.16);
-  --glow-3: rgba(59, 130, 246, 0.14);
+  --glow-1: rgba(0, 240, 255, 0.22);
+  --glow-2: rgba(255, 0, 127, 0.18);
+  --glow-3: rgba(59, 130, 246, 0.16);
 
   --text-main: #f8fafc;
   --text-muted: #94a3b8;
   --text-dim: #64748b;
 
-  --border-glass: rgba(255, 255, 255, 0.1);
-  --border-glow: rgba(0, 240, 255, 0.4);
+  --border-glass: rgba(255, 255, 255, 0.12);
+  --border-glow: rgba(0, 240, 255, 0.45);
   --card-radius: 28px;
   --pill-radius: 9999px;
   
@@ -38,30 +38,40 @@
   --bg-dark: #090714;
   --accent-primary: #a855f7;
   --accent-secondary: #3b82f6;
-  --glow-1: rgba(168, 85, 247, 0.2);
-  --glow-2: rgba(59, 130, 246, 0.18);
-  --glow-3: rgba(236, 72, 153, 0.14);
-  --border-glow: rgba(168, 85, 247, 0.45);
+  --glow-1: rgba(168, 85, 247, 0.24);
+  --glow-2: rgba(59, 130, 246, 0.2);
+  --glow-3: rgba(236, 72, 153, 0.16);
+  --border-glow: rgba(168, 85, 247, 0.5);
 }
 
 [data-theme="solar"] {
   --bg-dark: #120906;
   --accent-primary: #ff7e5f;
   --accent-secondary: #feb47b;
-  --glow-1: rgba(255, 126, 95, 0.22);
-  --glow-2: rgba(254, 180, 123, 0.18);
-  --glow-3: rgba(239, 68, 68, 0.14);
-  --border-glow: rgba(255, 126, 95, 0.45);
+  --glow-1: rgba(255, 126, 95, 0.26);
+  --glow-2: rgba(254, 180, 123, 0.2);
+  --glow-3: rgba(239, 68, 68, 0.16);
+  --border-glow: rgba(255, 126, 95, 0.5);
 }
 
 [data-theme="matrix"] {
   --bg-dark: #050e09;
   --accent-primary: #00ff88;
   --accent-secondary: #00b4d8;
-  --glow-1: rgba(0, 255, 136, 0.2);
-  --glow-2: rgba(0, 180, 216, 0.16);
-  --glow-3: rgba(16, 185, 129, 0.14);
-  --border-glow: rgba(0, 255, 136, 0.45);
+  --glow-1: rgba(0, 255, 136, 0.24);
+  --glow-2: rgba(0, 180, 216, 0.18);
+  --glow-3: rgba(16, 185, 129, 0.16);
+  --border-glow: rgba(0, 255, 136, 0.5);
+}
+
+[data-theme="gold"] {
+  --bg-dark: #110d05;
+  --accent-primary: #ffd700;
+  --accent-secondary: #ff6b35;
+  --glow-1: rgba(255, 215, 0, 0.24);
+  --glow-2: rgba(255, 107, 53, 0.18);
+  --glow-3: rgba(234, 179, 8, 0.15);
+  --border-glow: rgba(255, 215, 0, 0.5);
 }
 
 /* ==========================================================================
@@ -81,7 +91,7 @@ html, body {
   background-color: var(--bg-dark);
   font-family: var(--font-primary);
   color: var(--text-main);
-  background-image: radial-gradient(circle at 50% 50%, rgba(255,255,255,0.015) 1px, transparent 1px);
+  background-image: radial-gradient(circle at 50% 50%, rgba(255,255,255,0.02) 1px, transparent 1px);
   background-size: 32px 32px;
   position: relative;
   transition: background-color var(--transition-smooth);
@@ -158,9 +168,14 @@ html, body {
   pointer-events: none;
   z-index: 3;
   transform: translate(-50%, -50%);
-  opacity: 0.35;
+  opacity: 0.4;
   mix-blend-mode: screen;
-  transition: opacity 0.3s ease;
+  transition: opacity 0.3s ease, transform 0.1s ease;
+}
+
+.cursor-glow.pulling {
+  transform: translate(-50%, -50%) scale(1.35);
+  background: radial-gradient(circle, var(--accent-secondary) 0%, rgba(0,0,0,0) 70%);
 }
 
 /* ==========================================================================
@@ -176,8 +191,8 @@ html, body {
   align-items: center;
   padding: 1.25rem 2rem;
   z-index: 10;
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
   border-bottom: 1px solid var(--border-glass);
 }
 
@@ -224,10 +239,10 @@ html, body {
   display: flex;
   align-items: center;
   gap: 1rem;
-  background: rgba(0, 0, 0, 0.35);
+  background: rgba(0, 0, 0, 0.45);
   border: 1px solid var(--border-glass);
   border-radius: var(--pill-radius);
-  padding: 0.4rem 1rem;
+  padding: 0.4rem 1.1rem;
 }
 
 .telemetry-item {
@@ -255,6 +270,40 @@ html, body {
   width: 1px;
   height: 12px;
   background: var(--border-glass);
+}
+
+.hud-quick-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+}
+
+.hud-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.45rem 0.9rem;
+  border-radius: var(--pill-radius);
+  background: rgba(255, 255, 255, 0.07);
+  border: 1px solid var(--border-glass);
+  color: var(--text-main);
+  font-family: var(--font-primary);
+  font-size: 0.78rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.hud-btn:hover {
+  background: rgba(255, 255, 255, 0.15);
+  border-color: var(--accent-primary);
+  box-shadow: 0 0 12px var(--border-glow);
+  transform: translateY(-1px);
+}
+
+.hud-icon {
+  width: 14px;
+  height: 14px;
 }
 
 /* ==========================================================================
@@ -367,6 +416,8 @@ html, body {
 .audio-visualizer-mini.active .bar:nth-child(2) { animation: barDance 0.8s infinite 0.1s ease-in-out; }
 .audio-visualizer-mini.active .bar:nth-child(3) { animation: barDance 0.5s infinite 0.2s ease-in-out; }
 .audio-visualizer-mini.active .bar:nth-child(4) { animation: barDance 0.7s infinite 0.15s ease-in-out; }
+.audio-visualizer-mini.active .bar:nth-child(5) { animation: barDance 0.9s infinite 0.05s ease-in-out; }
+.audio-visualizer-mini.active .bar:nth-child(6) { animation: barDance 0.6s infinite 0.25s ease-in-out; }
 
 @keyframes barDance {
   0%, 100% { height: 4px; }
@@ -475,6 +526,190 @@ html, body {
 }
 
 /* ==========================================================================
+   8-Step Cyber Sequencer HUD Drawer
+   ========================================================================== */
+.sequencer-drawer {
+  position: fixed;
+  bottom: 6rem;
+  left: 50%;
+  transform: translateX(-50%) translateY(20px);
+  width: min(94vw, 760px);
+  background: rgba(10, 14, 30, 0.92);
+  backdrop-filter: blur(32px) saturate(190%);
+  -webkit-backdrop-filter: blur(32px) saturate(190%);
+  border: 1px solid var(--border-glass);
+  border-radius: 20px;
+  box-shadow: 0 24px 60px -10px rgba(0, 0, 0, 0.8), 0 0 30px -10px var(--border-glow);
+  padding: 1.5rem;
+  z-index: 20;
+  opacity: 0;
+  pointer-events: none;
+  transition: all var(--transition-smooth);
+}
+
+.sequencer-drawer.open {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateX(-50%) translateY(0);
+}
+
+.sequencer-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.25rem;
+  padding-bottom: 0.85rem;
+  border-bottom: 1px solid var(--border-glass);
+}
+
+.sequencer-title-wrap {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+}
+
+.sequencer-badge {
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  font-weight: 700;
+  padding: 0.15rem 0.5rem;
+  border-radius: var(--pill-radius);
+  background: var(--accent-primary);
+  color: #070913;
+}
+
+.sequencer-title {
+  font-family: var(--font-display);
+  font-size: 1.05rem;
+  font-weight: 700;
+}
+
+.sequencer-controls-top {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+}
+
+.bpm-control {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+}
+
+.bpm-control input[type="range"] {
+  width: 90px;
+  accent-color: var(--accent-primary);
+  cursor: pointer;
+}
+
+.btn-seq-play {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  background: var(--accent-primary);
+  color: #070913;
+  border: none;
+  padding: 0.45rem 1rem;
+  border-radius: var(--pill-radius);
+  font-family: var(--font-primary);
+  font-size: 0.82rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.btn-seq-play:hover {
+  filter: brightness(1.15);
+  box-shadow: 0 0 16px var(--border-glow);
+  transform: translateY(-1px);
+}
+
+.seq-play-icon {
+  width: 14px;
+  height: 14px;
+}
+
+.btn-seq-close {
+  background: transparent;
+  border: none;
+  color: var(--text-muted);
+  font-size: 1.5rem;
+  cursor: pointer;
+  line-height: 1;
+  padding: 0.2rem 0.5rem;
+  transition: color var(--transition-fast);
+}
+
+.btn-seq-close:hover {
+  color: var(--text-main);
+}
+
+.sequencer-matrix {
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+}
+
+.seq-track {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.seq-track-name {
+  width: 120px;
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  font-weight: 600;
+  color: var(--text-muted);
+}
+
+.seq-steps {
+  display: grid;
+  grid-template-columns: repeat(8, 1fr);
+  gap: 0.5rem;
+  flex: 1;
+}
+
+.seq-step {
+  height: 38px;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--border-glass);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  position: relative;
+}
+
+.seq-step:hover {
+  background: rgba(255, 255, 255, 0.15);
+  border-color: rgba(255, 255, 255, 0.3);
+}
+
+.seq-step.active {
+  background: var(--accent-primary);
+  border-color: #ffffff;
+  box-shadow: 0 0 12px var(--border-glow);
+}
+
+.seq-track[data-track="pad"] .seq-step.active {
+  background: var(--accent-secondary);
+  box-shadow: 0 0 12px var(--glow-2);
+}
+
+.seq-track[data-track="bass"] .seq-step.active {
+  background: #3b82f6;
+  box-shadow: 0 0 12px var(--glow-3);
+}
+
+.seq-step.playing {
+  outline: 2px solid #ffffff;
+  transform: scale(1.08);
+}
+
+/* ==========================================================================
    Floating Bottom Control Deck
    ========================================================================== */
 .control-deck {
@@ -486,14 +721,14 @@ html, body {
   align-items: center;
   gap: 2rem;
   padding: 0.85rem 1.75rem;
-  background: rgba(13, 17, 34, 0.8);
+  background: rgba(13, 17, 34, 0.82);
   backdrop-filter: blur(24px) saturate(180%);
   -webkit-backdrop-filter: blur(24px) saturate(180%);
   border: 1px solid var(--border-glass);
   border-radius: var(--pill-radius);
   box-shadow: 0 16px 40px -10px rgba(0, 0, 0, 0.6);
   z-index: 10;
-  max-width: 92vw;
+  max-width: 94vw;
 }
 
 .control-group {
@@ -571,7 +806,7 @@ html, body {
 /* ==========================================================================
    Responsive Breakpoints
    ========================================================================== */
-@media (max-width: 768px) {
+@media (max-width: 860px) {
   .hud-header {
     padding: 1rem 1.25rem;
   }
@@ -589,5 +824,9 @@ html, body {
   }
   .control-group-title {
     display: none;
+  }
+  .seq-track-name {
+    width: 80px;
+    font-size: 0.6rem;
   }
 }
