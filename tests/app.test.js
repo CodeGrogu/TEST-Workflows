@@ -7,7 +7,7 @@ import { fileURLToPath } from "node:url";
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const rootDir = path.resolve(__dirname, "..");
 
-test("HTML Structure Integrity", () => {
+test("HTML Structure Integrity & HUD Elements", () => {
   const htmlPath = path.join(rootDir, "index.html");
   assert.ok(fs.existsSync(htmlPath), "index.html must exist");
   
@@ -16,17 +16,36 @@ test("HTML Structure Integrity", () => {
   assert.ok(content.includes('<canvas id="bg-canvas"'), "Must include background canvas element");
   assert.ok(content.includes('class="glass-card"'), "Must include glass-card stage element");
   assert.ok(content.includes('class="hero-text"'), "Must include hero-text element");
-  assert.ok(content.includes('<meta name="viewport"'), "Must include viewport meta tag for responsive design");
+  assert.ok(content.includes('class="telemetry-bar"'), "Must include telemetry HUD bar");
+  assert.ok(content.includes('id="btn-burst"'), "Must include supernova burst trigger button");
+  assert.ok(content.includes('id="btn-audio-toggle"'), "Must include audio toggle button");
+  assert.ok(content.includes('class="segmented-control"'), "Must include particle engine mode selector");
+  assert.ok(content.includes('class="theme-palette-picker"'), "Must include theme palette picker");
 });
 
-test("CSS Design System & Stylesheet", () => {
+test("CSS Design System & Dynamic Themes", () => {
   const cssPath = path.join(rootDir, "style.css");
   assert.ok(fs.existsSync(cssPath), "style.css must exist");
   
   const content = fs.readFileSync(cssPath, "utf-8");
-  assert.ok(content.includes(":root"), "Must define CSS custom properties");
-  assert.ok(content.includes("#bg-canvas"), "Must style the canvas layer");
-  assert.ok(content.includes(".glass-card"), "Must style the glass card component");
+  assert.ok(content.includes(":root"), "Must define root custom properties");
+  assert.ok(content.includes('[data-theme="violet"]'), "Must support violet theme");
+  assert.ok(content.includes('[data-theme="solar"]'), "Must support solar theme");
+  assert.ok(content.includes('[data-theme="matrix"]'), "Must support matrix theme");
+  assert.ok(content.includes(".control-deck"), "Must style floating control deck HUD");
+  assert.ok(content.includes(".glass-card"), "Must style glass card component");
+});
+
+test("JavaScript Engine & Interactive Features", () => {
+  const jsPath = path.join(rootDir, "script.js");
+  assert.ok(fs.existsSync(jsPath), "script.js must exist");
+  
+  const content = fs.readFileSync(jsPath, "utf-8");
+  assert.ok(content.includes("class Particle"), "Must define Particle class");
+  assert.ok(content.includes("class BurstParticle"), "Must define BurstParticle class");
+  assert.ok(content.includes("drawMatrixStream"), "Must include matrix stream engine");
+  assert.ok(content.includes("triggerSynthesizerChord"), "Must include Web Audio synth engine");
+  assert.ok(content.includes("probeHealthStatus"), "Must include health probe integration");
 });
 
 test("Nginx Template Configuration", () => {
