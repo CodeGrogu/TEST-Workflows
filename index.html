@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hello World</title>
+  <meta name="description" content="An ultra-fancy interactive Hello World experience">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800;900&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- Ambient background glow layers -->
+  <div class="ambient-glow glow-1"></div>
+  <div class="ambient-glow glow-2"></div>
+  <div class="ambient-glow glow-3"></div>
+
+  <!-- Interactive Canvas Particle Mesh -->
+  <canvas id="bg-canvas"></canvas>
+
+  <!-- Cursor Spotlight -->
+  <div id="cursor-glow" class="cursor-glow"></div>
+
+  <!-- Main Hero Stage -->
+  <main class="stage" id="stage">
+    <div class="card-wrapper" id="card-wrapper">
+      <div class="glass-card" id="glass-card">
+        <!-- Accent decorative ring & reflections -->
+        <div class="card-border-glow"></div>
+        <div class="glass-reflection"></div>
+        
+        <!-- The requested single text element -->
+        <div class="text-container">
+          <h1 class="hero-text" id="hero-text" data-text="Hello World">
+            <span class="letter">H</span><span class="letter">e</span><span class="letter">l</span><span class="letter">l</span><span class="letter">o</span>
+            <span class="space">&nbsp;</span>
+            <span class="letter">W</span><span class="letter">o</span><span class="letter">r</span><span class="letter">l</span><span class="letter">d</span>
+          </h1>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>
