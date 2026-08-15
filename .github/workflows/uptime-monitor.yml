@@ -3,7 +3,7 @@ name: Uptime & Health Monitor
 on:
   schedule:
     # Run every 15 minutes
-    - cron: '*/15 * * * *'
+    - cron: '*/10 * * * *'
   workflow_dispatch:
     inputs:
       target_url:
@@ -34,7 +34,8 @@ jobs:
           PROBE_URL="${{ steps.config.outputs.url }}"
           START_TIME=$(date +%s%N)
           
-          HTTP_RESPONSE=$(curl -sS -w "\nHTTP_STATUS:%{http_code}\nTIME_TOTAL:%{time_total}" "$PROBE_URL" --max-time 10 || echo "CURL_FAILED")
+          # Use 45s max-time and retry to accommodate Render Free Tier container cold starts
+          HTTP_RESPONSE=$(curl -sS -w "\nHTTP_STATUS:%{http_code}\nTIME_TOTAL:%{time_total}" "$PROBE_URL" --max-time 45 --retry 2 --retry-delay 3 || echo "CURL_FAILED")
           
           HTTP_BODY=$(echo "$HTTP_RESPONSE" | sed -e '/HTTP_STATUS:/,$d')
           HTTP_STATUS=$(echo "$HTTP_RESPONSE" | grep "HTTP_STATUS:" | cut -d':' -f2)
